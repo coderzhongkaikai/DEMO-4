@@ -1,0 +1,622 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="https://cdn.staticfile.org/twitter-bootstrap/3.3.7/css/bootstrap.min.css">
+    <script src="https://cdn.staticfile.org/jquery/2.1.1/jquery.min.js"></script>
+    <script src="https://cdn.staticfile.org/twitter-bootstrap/3.3.7/js/bootstrap.min.js"></script>
+    <script type="text/javascript" src="http://libs.useso.com/js/jquery/1.7.2/jquery.min.js"></script>
+    <title>Document</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+        }
+
+        body {
+            user-select: none;
+            background-color: rgba(211, 202, 202, 0.5);
+        }
+
+        a {
+            text-decoration: none;
+            color: rgb(29, 29, 29);
+        }
+
+        .word {
+            width: 100%;
+            display: flex;
+            margin-top: 60px;
+        }
+
+        .left {
+            flex: 0 600px;
+            height: 600px;
+            margin-left: 200px;
+        }
+
+        .right {
+            flex: 1;
+            height: 600px;
+            margin-right: 200px;
+        }
+
+        .left .logo {
+            box-sizing: border-box;
+            text-align: center;
+            line-height: 640px;
+            font-size: 50px;
+        }
+
+        .right form {
+            width: 500px;
+            box-sizing: border-box;
+            padding: 15px 0;
+            border-radius: 12px;
+            background-color: rgb(246, 215, 109);
+        }
+
+        .right form h1 {
+            text-align: center;
+            font-size: 40px;
+            color: rgb(48, 78, 114);
+        }
+
+
+        .right form .int {
+            width: 380px;
+            height: 100%;
+            margin: 20px auto;
+        }
+
+        .right form .int p {
+            box-sizing: border-box;
+            width: 100%;
+            height: 50px;
+            margin-top: 25px;
+        }
+
+        .right form .int p input,
+        select {
+            width: 100%;
+            height: 100%;
+            border-radius: 6px;
+            border: none;
+            outline: none;
+            padding-left: 25px;
+            font-size: 18px;
+            box-sizing: border-box;
+        }
+
+
+        .right form .yzm-int {
+            width: 65% !important;
+            margin-right: 5%;
+        }
+
+        .right form .int p:nth-child(3) {
+            display: flex;
+        }
+
+        .right form .int .but {
+            width: 100%;
+            margin: 45px auto 0;
+            text-align: center;
+        }
+
+        .right form .but input {
+            width: 250px;
+            height: 45px;
+            border: none;
+            border-radius: 6px;
+            cursor: pointer;
+            font-size: 16px;
+            transition: all 0.3s ease;
+            outline: none;
+            background: linear-gradient(0deg, rgb(255 255 255) 0%, rgb(255 255 255) 100%);
+        }
+
+        #canvas {
+            cursor: pointer;
+            width: 30%;
+            height: 50px;
+            border-radius: 6px;
+        }
+
+        .right form .int .forgetPassword {
+            margin-top: 10px;
+        }
+
+        .word .right .switch {
+            display: flex;
+            justify-content: space-around;
+        }
+
+        .word .int .switch span {
+            width: 50%;
+            text-align: center;
+            font-size: 18px;
+            cursor: pointer;
+            padding-bottom: 5px;
+        }
+
+
+        .active {
+            border-bottom: 3px solid rgb(240, 70, 70);
+        }
+
+        .yzm {
+            display: flex;
+        }
+
+        /* 注册部分 */
+        .register {
+            display: none;
+        }
+
+
+
+
+        /* text-shadow:水平偏移量 垂直偏移量 模糊程度 阴影颜色; */
+        .but input {
+            box-shadow: inset 2px 2px 2px 0px rgba(255, 255, 255, .5),
+                7px 7px 20px 0px rgba(0, 0, 0, .1),
+                4px 4px 5px 0px rgb(169 154 102);
+        }
+
+        .but input:active {
+            box-shadow: 5px 4px 6px 0 rgb(246 215 109), -4px -4px 6px 0 rgb(213 203 168), inset -4px -4px 6px 0 rgb(183 183 183 / 20%), inset 4px 4px 6px 0 rgb(201 201 201);
+        }
+
+        select {
+            color: rgb(130, 130, 130);
+        }
+    </style>
+    <style>
+        body {
+            background-color: #ccc;
+        }
+
+        @media screen and (max-width: 100px) {
+            body {
+                background-color: red;
+            }
+        }
+
+        @media screen and (max-width: 800px) {
+            body {
+                background-color: green;
+            }
+        }
+
+        @media screen and (max-width: 6epx) {
+            body {
+                background-color: skyblue;
+            }
+        }
+
+        @media screen and (max-width: 400px) {
+            body {
+                background-color: yellow;
+            }
+        }
+    </style>
+<script>
+    function getLocation(){
+        if (navigator.geolocation){
+            navigator.geolocation.getCurrentPosition(showPosition,showError);
+        }else{
+            alert("浏览器不支持地理定位。");
+        }
+    }
+    
+    function showPosition(position){
+        $("#latlon").html("纬度:"+position.coords.latitude +'，经度:'+ position.coords.longitude);
+        var latlon = position.coords.latitude+','+position.coords.longitude;
+    
+        //baidu
+        var url = "http://api.map.baidu.com/geocoder/v2/?ak=C93b5178d7a8ebdb830b9b557abce78b&callback=renderReverse&location="+latlon+"&output=json&pois=0";
+        $.ajax({
+            type: "GET",
+            dataType: "jsonp",
+            url: url,
+            beforeSend: function(){
+                $("#baidu_geo").html('正在定位...');
+            },
+            success: function (json) {
+                if(json.status==0){
+                    
+                    $("#baidu_geo").html(json.result.formatted_address);
+                }
+            },
+            error: function (XMLHttpRequest, textStatus, errorThrown) {
+                $("#baidu_geo").html(latlon+"地址位置获取失败");
+            }
+        });
+    }
+    
+    function showError(error){
+        switch(error.code) {
+            case error.PERMISSION_DENIED:
+                alert("定位失败,用户拒绝请求地理定位");
+                break;
+            case error.POSITION_UNAVAILABLE:
+                alert("定位失败,位置信息是不可用");
+                break;
+            case error.TIMEOUT:
+                alert("定位失败,请求获取用户位置超时");
+                break;
+            case error.UNKNOWN_ERROR:
+                alert("定位失败,定位系统失效");
+                break;
+        }
+    }
+    
+    getLocation();
+    </script>
+</head>
+
+<body>
+    <div class="word container">
+
+        <div class="left row">
+            <div class="logo hidden-xs hidden-sm">
+                <canvas id="myCanvas" width="300" height="200"
+                    style="border:10px solid #d3d3d3; border-radius: 12px;"></canvas>
+            </div>
+        </div>
+
+        <div class="right">
+            <form method="GET">
+                <!-- 登录部分 -->
+                <h1>欢迎登陆</h1>
+                <div class="int">
+
+                    <div class="switch ">
+                        <span class="active">登 录</span>
+                        <span class="">注 册</span>
+                    </div>
+
+                    <div class="login ">
+                        <p><input type="text" class="username" name="zhanghu" placeholder="用户名" required
+                                autocomplete="off" value="root"></p>
+                        <p><input type="password" class="password" name="mima" placeholder="密码" required value="123456">
+                        </p>
+                        <p class="yzm">
+                            <input class="yzm-int" type="text" placeholder="验证码" required>
+                            <canvas id="canvas"></canvas>
+                        </p>
+                        <div class="forgetPassword"><a href="javascript:void(0);">忘记密码 ？</a></div>
+
+                        <div class="but">
+                            <button type="submit" class="btn btn-default" onclick="signIn()">登录</button>
+                        </div>
+
+                    </div>
+
+                    <!-- 注册部分 -->
+                    <div class="register">
+                        <form>
+                            <div>
+                                <p><input type="text" class="register_user" placeholder="昵称或用户名" required
+                                        autocomplete="off" value="李四"></p>
+                                <p><input type="password" class="register_password" placeholder="密码" required
+                                        value="123456"></p>
+                                <p><input type="email" class="register_email" placeholder="电子邮件" value="123456@163.com">
+                                </p>
+                                <p><input type="date" class="register_date"></p>
+                                <p>
+                                    <select>
+                                        <option value="" class="hobby">兴趣爱好</option>
+                                        <option value="跑步">跑步</option>
+                                        <option value="跳绳">跳绳</option>
+                                        <option value="游泳">游泳</option>
+                                        <option value="打球">打球</option>
+                                        <option value="其他">其他</option>
+                                    </select>
+                                </p>
+
+                                <div class="but">
+
+                                    <button type="submit" class="register_but">注册</button>
+                                </div>
+                            </div>
+                        </form>
+                    </div>
+
+                </div>
+
+
+
+            </form>
+
+
+
+        </div>
+
+    </div>
+
+    <script>
+        // logo
+        var c = document.getElementById("myCanvas");
+        var ctx = c.getContext("2d");
+        ctx.beginPath();
+        ctx.arc(150, 100, 90, 0, 4 * Math.PI);
+        ctx.stroke();
+        ctx.fillstyle = "#00f";
+        ctx.font = "bold 60px sans-serif";
+        ctx.textAlign = "left";
+        ctx.textBaseline = "top";
+        // ctx.fillText('南宁', 100, 40, 90);
+        ctx.strokeText('南宁', 100, 40, 100);
+        ctx.font = "bold 60px sans-serif";
+        ctx.strokeText('学院', 100, 100, 100);
+
+
+        // 验证码
+        let _picTxt = ""; //随机数
+
+        //生成随机数
+        randomNum = (min, max) => {
+            return Math.floor(Math.random() * (max - min) + min);
+        }
+        //生成随机颜色RGB分量
+        randomColor = (min, max) => {
+            let _r = randomNum(min, max);
+            let _g = randomNum(min, max);
+            let _b = randomNum(min, max);
+            return "rgb(" + _r + "," + _g + "," + _b + ")";
+        }
+        //先阻止画布默认点击发生的行为再执行drawPic()方法
+        document.getElementById("canvas").onclick = (e) => {
+            e.preventDefault();
+            drawPic();
+        };
+        drawPic = () => {
+            _picTxt = '';
+            //获取到元素canvas
+            let $canvas = document.getElementById("canvas");
+            let _str = "0123456789"; //设置随机数库
+            let _num = 4; //4个随机数字
+            let _width = $canvas.width;
+            let _height = $canvas.height;
+            let ctx = $canvas.getContext("2d"); //获取 context 对象
+            ctx.textBaseline = "bottom"; //文字上下对齐方式--底部对齐
+            ctx.fillStyle = randomColor(180, 240); //填充画布颜色
+            ctx.fillRect(0, 0, _width, _height); //填充矩形--画画
+            for (let i = 0; i < _num; i++) {
+                let x = (_width - 10) / _num * i + 10;
+                let y = randomNum(_height / 2, _height);
+                let deg = randomNum(-45, 45);
+                let txt = _str[randomNum(0, _str.length)];
+                _picTxt += txt; //获取一个随机数
+                ctx.fillStyle = randomColor(10, 100); //填充随机颜色
+                ctx.font = randomNum(82, 100) + "px SimHei"; //设置随机数大小，字体为SimHei
+                ctx.translate(x, y); //将当前xy坐标作为原始坐标
+                ctx.rotate(deg * Math.PI / 180); //旋转随机角度
+                ctx.fillText(txt, 0, 0); //绘制填色的文本
+                ctx.rotate(-deg * Math.PI / 180);
+                ctx.translate(-x, -y);
+            }
+            for (let i = 0; i < _num; i++) {
+                //定义笔触颜色
+                ctx.strokeStyle = randomColor(90, 180);
+                ctx.beginPath();
+                //随机划线--4条路径
+                ctx.moveTo(randomNum(0, _width), randomNum(0, _height));
+                ctx.lineTo(randomNum(0, _width), randomNum(0, _height));
+                ctx.stroke();
+            }
+            for (let i = 0; i < _num * 10; i++) {
+                ctx.fillStyle = randomColor(0, 255);
+                ctx.beginPath();
+                //随机画原，填充颜色
+                ctx.arc(randomNum(0, _width), randomNum(0, _height), 1, 0, 2 * Math.PI);
+                ctx.fill();
+            }
+            return _picTxt; //返回随机数字符串
+        }
+        drawPic();
+
+
+        let data = []; //存储数据数组
+        if (localStorage.getItem('data')) {
+            console.log('有数据');
+        } else {
+            //默认存入测试用户
+            user = () => {
+
+                dataObj = {
+                    name: 'root',
+                    password: 123456
+                }
+
+                data.push(dataObj); //注册用户数据对象插入data数组
+                let objStr = JSON.stringify(data)
+                localStorage.setItem('data', objStr)
+            }
+            user();
+        }
+
+
+        let register_but = document.querySelector('.register_but'); //获取注册提交按钮元素
+        let register_user = document.querySelector('.register_user'); //获取注册用户名元素
+        // 点击注册存入数据
+        register_but.onclick = function () {
+            let register_password = document.querySelector('.register_password');
+            let register_email = document.querySelector('.register_email');
+            let register_date = document.querySelector('.register_date');
+            let flag = true; //判断用户是否已经存在
+
+            if (register_user.value && register_password.value && register_email.value) {
+
+                let register_user_value = register_user.value; //获取用户名的值
+
+                if (localStorage.getItem('data')) {
+                    let DataList = localStorage.getItem('data'); //获取localStorage数据
+                    DataList = JSON.parse(DataList);
+
+                    DataList.forEach(item => {
+                        if (register_user_value == item.name) {
+                            register_user.setCustomValidity("用户已存在!");
+                            flag = false; //用户存在状态为false
+                            return false;
+                        }
+                    })
+
+                    //如果用户存在则不存入数据
+                    if (flag) {
+                        register_user.setCustomValidity(""); //现将有输入时的提示设置为空
+                        register_password_value = register_password.value; //获取密码的值
+                        register_email_value = register_email.value; //获取邮箱的值
+                        register_date_value = register_date.value; //获取日期的值
+
+                        // 注册用户数据对象
+                        let dataObj = {
+                            name: register_user_value,
+                            password: register_password_value,
+                            email: register_email_value,
+                            date: register_date_value
+                        }
+
+                        DataList.push(dataObj); //注册用户数据对象插入data数组
+                        console.log(DataList);
+                        let objStr = JSON.stringify(DataList)
+                        localStorage.setItem('data', objStr) //注册数据存入localStorage
+                        alert('注册成功!')
+                    }
+                }
+            }
+        }
+
+
+        let username = document.querySelector('.username');
+        let password = document.querySelector('.password');
+        let yzm_int = document.querySelector('.yzm-int');
+
+
+        // 登录用户名输入时触发的事件
+        username.oninput = function () {
+            modifyUser();
+        }
+        // 登录密码输入时触发的事件
+        password.oninput = function () {
+            modifyPassword()
+        }
+
+        // 验证码输入框输入时触发的事件
+        yzm_int.oninput = function () {
+            modifyCode()
+        }
+
+        //注册用户名输入时触发的事件
+        register_user.oninput = function () {
+            registerUser()
+        }
+
+
+
+        // 验证登录方法
+        signIn = () => {
+
+            if (yzm_int.value == _picTxt && localStorage.getItem('data')) {
+
+                let DataList = window.localStorage.getItem('data');
+                DataList = JSON.parse(DataList)
+
+                DataList.forEach(item => {
+                    if (username.value == item.name) {
+                        if (password.value == item.password) {
+                            console.log('登录成功!');
+                            location.href = "管理页面.html";
+                            window.event.returnValue = false;
+                        } else {
+                            password.setCustomValidity("密码错误!");
+                        }
+                    } else if (username.value == '') {
+                        modifyUser();
+                    } else {
+                        username.setCustomValidity("用户名错误,请检查您的输入是否正确！");
+                    }
+                });
+                console.log(DataList);
+
+            } else if (yzm_int.value == '') {
+                modifyCode();
+            } else {
+                yzm_int.setCustomValidity("验证码错误");
+            }
+        }
+
+        // 修改表单必填提示方法
+        function modifyUser() {
+            if (username.value) {
+                username.setCustomValidity(""); //现将有输入时的提示设置为空
+            } else if (username.validity.valueMissing) {
+                username.setCustomValidity("用户名不能为空");
+            }
+        }
+        modifyUser()
+
+        function modifyPassword() {
+            if (password.value) {
+                password.setCustomValidity(""); //现将有输入时的提示设置为空
+            } else if (password.validity.valueMissing) {
+                password.setCustomValidity("密码不能为空");
+            }
+        }
+        modifyPassword()
+
+        function modifyCode() {
+            if (yzm_int.value) {
+                yzm_int.setCustomValidity(""); //现将有输入时的提示设置为空
+            } else if (yzm_int.validity.valueMissing) {
+                yzm_int.setCustomValidity("验证码不能为空");
+            }
+        }
+        modifyCode()
+
+        //注册用户名必填提示方法
+        function registerUser() {
+            if (register_user.value) {
+                register_user.setCustomValidity(""); //现将有输入时的提示设置为空
+            } else if (register_user.validity.valueMissing) {
+                register_user.setCustomValidity("验证码不能为空");
+            }
+        }
+        registerUser()
+
+
+
+        // 登录和注册切换
+        let btn = document.querySelectorAll('.switch span');
+        let htext = document.querySelector('.right h1')
+        for (let i = 0; i < btn.length; i++) {
+            btn[i].onclick = function () {
+                // 登录注册之间切换样式
+                for (let j = 0; j < btn.length; j++) {
+                    btn[j].classList.remove("active");
+                }
+                this.classList.add('active');
+
+                // 登录注册之间切换内容
+                let login = document.querySelector('.login');
+                let register = document.querySelector('.register');
+                if (btn[0].getAttribute("class") == 'active') {
+                    login.style.display = 'block';
+                    register.style.display = 'none';
+                    htext.innerHTML = '欢迎登录';
+                } else {
+                    login.style.display = 'none';
+                    register.style.display = 'block';
+                    htext.innerHTML = '欢迎注册';
+                }
+            }
+        }
+    </script>
+</body>
+
+</html>

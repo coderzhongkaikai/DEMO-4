@@ -1,0 +1,350 @@
+<!DOCTYPE HTML>
+<html>
+
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+    <title>演示：HTML5获取地理位置定位信息</title>
+    <meta name="keywords" content="html5,地理位置" />
+    <meta name="description" content="HTML5、CSS3、jquery、PHP等WEB技术应用。" />
+    <script src="https://apps.bdimg.com/libs/jquery/2.1.4/jquery.min.js"></script>
+
+    <style type="text/css">
+        .demo {
+            width: 560px;
+            margin: 60px auto 10px auto
+        }
+
+        .geo {
+            margin-top: 20px
+        }
+
+        .demo p {
+            line-height: 32px;
+            font-size: 16px
+        }
+
+        .demo p span,
+        #baidu_geo,
+        #google_geo {
+            font-weight: bold
+        }
+
+   
+    </style>
+
+    <link rel="stylesheet" href="css/base.css" type="text/css" media="screen">
+    <style>
+        /*竖屏*/
+        @media only screen and (orientation:portrait) {
+
+            /* body *{ display:none !important;} */
+            .top:after {
+                content: "现在是竖屏";
+                width: 100%;
+                height: 100%;
+                text-align: center;
+                display: flex;
+                align-items: center;
+                justify-content: center;
+                background: yellow;
+            }
+        }
+
+        /*横屏*/
+        @media only screen and (orientation:landscape) {
+
+            /* body *{ display:none !important;} */
+            .top:after {
+                content: "现在是横屏";
+                width: 100%;
+                height: 100%;
+                text-align: center;
+                display: flex;
+                align-items: center;
+                justify-content: center;
+                background: red;
+            }
+        }
+    </style>
+</head>
+
+<body>
+
+    //地图
+    <div id="map">
+        <div class="top"></div>
+        <div class="demo">
+            <p>地理坐标：<span id="latlon"></span></p>
+            <div class="geo">
+                <p>百度地图定位位置：</p>
+                <p id="baidu_geo"></p>
+                <div id="mapContainer" style="width: 80%;height: 80%;"></div>
+
+            </div>
+        </div>
+
+    </div>
+    //拍照
+    <div class="camera">
+        <div id="cameraBtn">
+            <input type="button" id="init" onclick="captureInit()" value="开启摄像头" />
+            <input type="button" id="capture" onclick="capture()" value="拍照" />
+            <input type="button" id="queren" onclick="queren()" value="确定" />
+            <span id="help" style="display:none;"><a href="/static/ad/down/camera.doc">点此下载无法拍照的解决方案</a></span>
+        </div>
+        <div id="cameraDiv">
+            <!-- 视频流 -->
+            <video id="video" autoplay style="width: 300px;height: 200px"></video>
+            <!--描绘video截图-->
+            <canvas id="canvas" width="300" height="200"></canvas>
+        </div>
+    </div>
+
+
+    //相机API调用
+    <script type="text/javascript">
+        //访问用户媒体设备的兼容方法
+        function getUserMedia(constrains, success, error) {
+            if (navigator.mediaDevices.getUserMedia) {
+                //最新标准API
+                navigator.mediaDevices.getUserMedia(constrains).then(success).catch(error);
+            } else if (navigator.webkitGetUserMedia) {
+                //webkit内核浏览器
+                navigator.webkitGetUserMedia(constrains).then(success).catch(error);
+            } else if (navigator.mozGetUserMedia) {
+                //Firefox浏览器
+                navagator.mozGetUserMedia(constrains).then(success).catch(error);
+            } else if (navigator.getUserMedia) {
+                //旧版API
+                navigator.getUserMedia(constrains).then(success).catch(error);
+            } else {
+                alert("不支持的浏览器");
+            }
+        }
+        //成功的回调函数
+        function success(stream) {
+            //兼容webkit内核浏览器
+            var CompatibleURL = window.URL || window.webkitURL;
+            //将视频流设置为video元素的源
+            try {
+                video.srcObject = stream;
+            } catch (e) {
+                video.src = CompatibleURL.createObjectURL(stream);
+            }
+            //播放视频
+            video.play();
+        }
+        //异常的回调函数
+        function error(error) {
+            alert("访问用户媒体设备失败," + error.name + "" + error.message);
+        }
+
+        /**
+         * 获取当前静态页面的参数
+         * 返回值和使用方法类似java request的getparamater
+         * 不同: 当取得的为数组(length>1)时调用toString()返回(逗号分隔每个元素)
+         * @param {Object} name
+         * @return {TypeName} 
+         */
+        function getPara(name, search) {
+            var p = getParas(name, search);
+            if (p.length == 0) {
+                return null;
+            } else if (p.length == 1) {
+                return p[0];
+            } else {
+                return p.toString();
+            }
+        }
+
+        /**获取当前静态页面的参数
+         * 返回值和使用方法类似java request的getparamaterValues
+         * @param {Object} name 要取出的参数名,可以在参数字符串中重复出现
+         * @param {Object} search 手工指定要解析的参数字符串,默认为当前页面后跟的参数
+         * @return {TypeName} 
+         */
+        function getParas(name, search) {
+            if (!search) {
+                search = window.location.search.substr(1); //1.html?a=1&b=2
+            }
+            var para = [];
+            var pairs = search.split("&"); //a=1&b=2&b=2&c=2&b=2
+            for (var i = 0; i < pairs.length; i = i + 1) {
+                var sign = pairs[i].indexOf("=");
+                if (sign == -1) { //如果没有找到=号，那么就跳过，跳到下一个字符串（下一个循环）。	
+                    continue;
+                }
+                var aKey = pairs[i].substring(0, sign);
+                if (aKey == name) {
+                    para.push(unescape(pairs[i].substring(sign + 1)));
+                }
+            }
+            return para;
+        }
+        //开启摄像头
+        function captureInit() {
+            if ((navigator.mediaDevices != undefined && navigator.mediaDevices.getUserMedia != undefined) ||
+                navigator.getUserMedia != undefined ||
+                navigator.webkitGetUserMedia != undefined ||
+                navigator.mozGetUserMedia != undefined) {
+                document.getElementById("help").style.display = "none";
+                //调用用户媒体设备，访问摄像头,改为触发事件
+                getUserMedia({
+                    video: {
+                        width: imgWidth,
+                        height: imgHeight
+                    }
+                }, success, error);
+                if (captureState == 0) {
+                    captureState = 1; //标记此按钮已点击
+                }
+            } else {
+                captureState = 0; //异常标识按钮没点
+                alert("你的浏览器不支持访问用户媒体设备或访问地址不是https开头,您可以点击右侧下载解决方案");
+                document.getElementById("help").style.display = "inline-block";
+            }
+        }
+        //注册拍照按钮的单击事件
+        function capture() {
+            //绘制画面
+            if (captureState == 0) {
+                alert("请先开启摄像头");
+                return;
+            }
+            context.drawImage(video, 0, 0, imgWidth, imgHeight); //后面两个长宽
+            //canvas.toDataURL("image/png");//即可得到base64编码
+            captureState = 2;
+        }
+        //确认按钮返回给父页面的函数
+        function queren() {
+            if (captureState != 2) {
+                alert("请先开启摄像头并拍照");
+                return;
+            }
+            var base64 = canvas.toDataURL("image/jpeg");
+            var pics = {};
+            pics.filetypeid = filetypeid; //返回给前端
+            pics.base64 = base64;
+            if (window.opener) {
+                window.opener[cb](pics); // /FileUploadTmp/为项目临时文件夹相对路径
+                window.close();
+            } else if (window.parent) {
+                window.parent[cb](pics);
+                window.parent.$("#dialog_ifr_html").dialog("close"); //close会导致flash未执行完就销毁,页面JS报错
+            } else {
+                window.close();
+            }
+        }
+    </script>
+    //照片呈现
+    <script type="text/javascript">
+        var cb = getPara("cb") || "setImg";
+        var filetypeid = getPara("filetypeid") || "filetypeid"; //附件类型id
+        var video = document.getElementById("video");
+        var canvas = document.getElementById("canvas");
+        var context = canvas.getContext("2d");
+        var imgWidth = getPara("width") || "300"; //这个值div的宽一致
+        var imgHeight = getPara("height") || "200"; //这个值div的高一致
+        var captureState = 0; //未开启,1已开启,2已拍照,为2才可点击确认按钮
+        var style = getPara("style") || "big-btn-blue";
+        video.style.width = imgWidth;
+        video.style.height = imgHeight;
+        var st = style.split(",");
+        document.getElementById("init").className = st[0];
+        document.getElementById("capture").className = st[1] || st[0];
+        document.getElementById("queren").className = st[2] || st[0];
+        document.getElementById("help").className = st[3] || st[0];
+    </script>
+    //地理位置
+    <script type="text/javascript" src="http://api.map.baidu.com/api?v=2.0&ak=9kDD469v84bREIs8ZSzn5eeTDdOGzxCk"></script>  
+
+    <script>
+     var map = new BMap.Map("mapContainer");
+
+        function getLocation() {
+            if (navigator.geolocation) {
+
+                navigator.geolocation.getCurrentPosition(showPosition, showError);
+            } else {
+                alert("浏览器不支持地理定位。");
+            }
+        }
+
+        function showPosition(position) {
+
+            $("#latlon").html("纬度:" + position.coords.latitude + '，经度:' + position.coords.latitude);
+            var latlon = position.coords.latitude + ',' + position.coords.longitude;
+               // 百度地图API功能
+            // map.centerAndZoom(new BMap.Point(116.331398,39.897445),19);
+            // map.enableScrollWheelZoom(true);
+    // 用经纬度设置地图中心点
+            var new_point = new BMap.Point(position.coords.latitude,position.coords.latitude);
+            var marker = new BMap.Marker(new_point);  // 创建标注
+            map.addOverlay(marker);              // 将标注添加到地图中
+            map.panTo(new_point);      
+            // var map = new BMapGL.Map('mapContainer'); // 创建Map实例
+            // map.centerAndZoom(new BMapGL.Point(116.404, 39.915), 12); // 初始化地图,设置中心点坐标和地图级别
+            // map.enableScrollWheelZoom(true); // 开启鼠标滚轮缩放
+            //baidu
+            // function loadJScript() {
+            // var script = document.createElement('script');
+            // script.type = 'text/javascript';
+            // script.src = '//api.map.baidu.com/api?type=webgl&v=1.0&ak=9kDD469v84bREIs8ZSzn5eeTDdOGzxCk&callback=init';
+            // document.body.appendChild(script);
+            // }
+            // function init() {
+            // var map = new BMapGL.Map('mapContainer'); // 创建Map实例
+            // var point = new BMapGL.Point(position.coords.latitude,position.coords.latitude); // 创建点坐标
+            // map.centerAndZoom(point, 10);
+            // map.enableScrollWheelZoom(); // 启用滚轮放大缩小
+            // }
+            // window.onload = loadJScript; // 异步加载地图
+            // var url =
+            //     "http://api.map.baidu.com/geocoder/v2/?ak=9kDD469v84bREIs8ZSzn5eeTDdOGzxCk&callback=renderReverse&location=" +
+            //     latlon + "&output=json&pois=0";
+
+            //     // 9kDD469v84bREIs8ZSzn5eeTDdOGzxCk
+            // $.ajax({
+            //     type: "GET",
+            //     dataType: "jsonp",
+            //     url: url,
+            //     beforeSend: function () {
+            //         $("#baidu_geo").html('正在定位...');
+            //     },
+            //     success: function (json) {
+            //         if (json.status == 0) {
+            //             $("#baidu_geo").html(json.result.formatted_address);
+            //         }
+
+            //     },
+            //     error: function (XMLHttpRequest, textStatus, errorThrown) {
+            //         $("#baidu_geo").html(latlon + "地址位置获取失败");
+            //     }
+            // });
+
+        }
+
+        function showError(error) {
+            switch (error.code) {
+                case error.PERMISSION_DENIED:
+                    alert("定位失败,用户拒绝请求地理定位");
+                    break;
+                case error.POSITION_UNAVAILABLE:
+                    alert("定位失败,位置信息是不可用");
+                    break;
+                case error.TIMEOUT:
+                    alert("定位失败,请求获取用户位置超时");
+                    break;
+                case error.UNKNOWN_ERROR:
+                    alert("定位失败,定位系统失效");
+                    break;
+            }
+        }
+
+        getLocation();
+    </script>
+
+</body>
+
+</html>

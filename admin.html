@@ -1,0 +1,927 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <html lang="zh-cmn-Hans">
+        <meta charset="UTF-8">
+    <meta name="viewport"
+        content="width=device-width,initial-scale=1.0, minimum-scale=1.0, maximum-scale=1.0, user-scalable=no" />
+    <title>Document</title>
+    <style>
+        /*竖屏*/
+        @media only screen and (orientation:portrait) {
+
+            /* body *{ display:none !important;} */
+            .body-right {
+                /* content: "现在是竖屏"; */
+                max-width: 550px;
+
+                height: 100%;
+                /* text-align: center;
+                display: flex;
+                align-items: center;
+                justify-content: center; */
+                /* background: yellow; */
+            }
+        }
+
+        /*横屏*/
+        @media only screen and (orientation:landscape) {
+
+            /* body *{ display:none !important;} */
+            .body-right {
+                /* content: "现在是横屏"; */
+                min-width: 800px;
+
+                /* height: 100%;
+                text-align: center;
+                display: flex;
+                align-items: center;
+                justify-content: center; */
+                /* background: red; */
+            }
+        }
+    </style>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+        }
+
+        ul {
+            list-style: none;
+        }
+
+        html,
+        body {
+            height: 100%;
+        }
+
+        .header {
+            width: 100%;
+            height: 60px;
+            background-color: #009688;
+            color: #fff;
+            position: fixed;
+            display: flex;
+            z-index: 999;
+        }
+
+        .header .logo {
+            font-size: 25px;
+            font-weight: bold;
+            flex: 0 250px;
+            line-height: 60px;
+            text-align: center;
+        }
+
+        .header .left {
+            flex: 1;
+        }
+
+        .header .right {
+            flex: 0 200px;
+            display: flex;
+            line-height: 60px;
+            justify-content: space-around;
+        }
+
+        .header .right span {
+            cursor: pointer;
+        }
+
+        .header .right span {
+            display: inline-block;
+        }
+
+        .header .right span:nth-child(3) {
+            color: rgba(255, 255, 255, .7);
+        }
+
+        .body {
+            width: 100%;
+            height: 100%;
+            position: relative;
+            box-sizing: border-box;
+            padding-top: 60px;
+            display: flex;
+        }
+
+        .body .body-left {
+            flex: 0 200px;
+            color: #fff;
+            /* position: fixed; */
+            background-color: #393D49;
+        }
+
+        .body .body-left ul {
+            width: 100%;
+        }
+
+        .body .body-left .headPortrait {
+            margin: 15px;
+            text-align: center;
+        }
+
+        .body .body-left .headPortrait a {
+            display: inline-block;
+            width: 75px;
+            height: 75px;
+            border-radius: 6px;
+            overflow: hidden;
+        }
+
+        .body .body-left .headPortrait a img {
+            width: 100%;
+            height: 100%;
+        }
+
+        .body .body-left ul li {
+            height: 45px;
+            line-height: 45px;
+            padding: 0 20px;
+            cursor: pointer;
+            color: rgba(255, 255, 255, .7);
+        }
+
+        /* .body .body-left ul li:hover {
+            background-color: #4E5465;
+            color: #fff;
+        } */
+
+
+        .menu_active {
+            background-color: #009688;
+            color: #fff;
+        }
+
+        .body .body-right {
+            flex: 1;
+            height: 100%;
+            box-sizing: border-box;
+            padding-top: 30px;
+            padding-left: 50px;
+            padding-right: 50px;
+        }
+
+        .body .body-right .search {
+            width: 80%;
+            height: 70px;
+            line-height: 70px;
+        }
+
+        .body .body-right .search input {
+            width: 200px;
+            height: 38px;
+            line-height: 1.3;
+            border-width: 1px;
+            border-style: solid;
+            border-radius: 2px;
+            padding-left: 10px;
+            outline: none;
+            background-color: #fff;
+            border-color: #e6e6e6;
+        }
+
+        .body .body-right .search button {
+            width: 68px;
+            height: 38px;
+            line-height: 1.3;
+            border-width: 1px;
+            border-style: solid;
+            border-radius: 2px;
+            border-color: #e6e6e6;
+            cursor: pointer;
+        }
+
+        .body .body-right .content {
+            width: 100%;
+            border: 1px solid #e6e6e6;
+        }
+
+        .body .body-right .content .title ul {
+            width: 100%;
+            height: 50px;
+            display: flex;
+            line-height: 50px;
+            justify-content: space-between;
+            box-sizing: border-box;
+            padding: 0 30px;
+            background-color: rgb(245, 246, 250);
+            text-align: center;
+        }
+
+        .body .body-right .content .title li:nth-child(1) {
+            width: 100px;
+        }
+
+        .body .body-right .content .title li:nth-child(2) {
+            width: 80px;
+        }
+
+        .body .body-right .content .title li:nth-child(3) {
+            width: 250px;
+        }
+
+        .body .body-right .content .title li:nth-child(4) {
+            width: 80px;
+        }
+
+        .body .body-right .content .title li:nth-child(5) {
+            width: 80px;
+        }
+
+        .body .body-right .content .dataList .list>li {
+            width: 100%;
+            height: 60px;
+            box-sizing: border-box;
+            padding: 0 30px;
+            border-top: 1px solid #e6e6e6;
+            border-bottom: 1px solid #e6e6e6;
+            ;
+        }
+
+        .body .body-right .content .dataList .img img {
+            width: 40px;
+            height: 40px;
+            display: inline-block;
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            margin: auto;
+            cursor: pointer;
+            border-radius: 4px;
+        }
+
+        .body .body-right .content .dataList .list .listRow {
+            display: flex;
+            height: 100%;
+            line-height: 60px;
+            justify-content: space-between;
+            text-align: center;
+        }
+
+        .body .body-right .content .dataList .listRow li:nth-child(1) {
+            width: 50px;
+            position: relative;
+        }
+
+        .body .body-right .content .dataList .listRow li:nth-child(2) {
+            width: 80px;
+        }
+
+        .body .body-right .content .dataList .listRow li:nth-child(3) {
+            width: 250px;
+        }
+
+        .body .body-right .content .dataList .listRow li:nth-child(4) {
+            width: 80px;
+        }
+
+        .body .body-right .content .dataList .listRow li:nth-child(5) {
+            width: 80px;
+        }
+
+        .active {
+            transform: scale(2);
+        }
+
+        .modify_avatar {
+            /* width: 500px; */
+            display: flex;
+            flex-wrap: wrap;
+            /* justify-content: space-around; */
+
+        }
+
+        .modify_avatar .user_avatar {
+            width: 200px;
+            height: 200px;
+            margin: 20px;
+            /* position: relative; */
+            background-color: antiquewhite;
+        }
+
+        .modify_avatar .user_avatar img {
+            width: 100%;
+            height: 100%;
+        }
+
+        .modify_avatar .modify_img {
+            width: 200px;
+            height: 200px;
+            text-align: center;
+            line-height: 200px;
+            margin: 20px;
+            color: #ccc;
+            background-color: antiquewhite;
+        }
+
+        .div_off {
+            display: none;
+        }
+
+        .Div {
+            margin: 20px;
+        }
+    </style>
+    <script src="https://apps.bdimg.com/libs/jquery/2.1.4/jquery.min.js"></script>
+    <script type="text/javascript" src="http://api.map.baidu.com/api?v=1.0&ak=C93b5178d7a8ebdb830b9b557abce78b"></script>
+
+</head>
+
+<body>
+    <div class="header">
+
+        <div class="logo">
+            小组成员管理页面
+        </div>
+        <div class="left">
+
+        </div>
+
+        <div class="right">
+            <span class="signIn">登录</span>
+            <span>注册</span>
+            <span>退出</span>
+        </div>
+
+    </div>
+
+    <div class="body">
+        <div class="body-left">
+            <ul>
+                <div class="headPortrait">
+                    <a href="javascript:;">
+                        <img src="./images/滕贺宗.jpg" alt="">
+                    </a>
+                    <p>欢迎登录</p>
+                </div>
+                <div class="nav_list">
+                    <li class="menu_active">个人信息</li>
+                    <li >用户管理</li>
+                    <li>系统设置</li>
+                </div>
+            </ul>
+        </div>
+
+
+        <div class="body-right">
+
+            <div class="modify_avatar contain ">
+                <div class="user_avatar">
+                    <img src="./images/滕贺宗.jpg" alt="">
+                </div>
+                <div class="modify_img" ondragover="allowDrop(event)" ondrop="drop(event)">
+                    拖入图片修改
+                </div>
+
+                <div id="map ">
+                    <div class="top"></div>
+                    <div class="demo">
+                        <p>地理坐标：<span id="latlon"></span></p>
+                        <div class="geo">
+                            <p>百度地图定位位置：</p>
+                            <input type="button" value="查询" onclick="theLocation()" />
+                            <div id="allmap" style="width: 80%;height: 80%;"></div>
+                            <p id="baidu_geo"></p>
+                        </div>
+                    </div>
+
+                </div>
+
+                <div>
+                    <div class="Div" id="cameraBtn">
+                        <input type="button" id="init" onclick="captureInit()" value="开启摄像头" />
+                        <input type="button" id="capture" onclick="capture()" value="拍照" />
+                        <input type="button" id="queren" onclick="queren()" value="确定" />
+                        <span id="help" style="display:none;"><a
+                                href="/static/ad/down/camera.doc">点此下载无法拍照的解决方案</a></span>
+                    </div>
+                    <div style="display: flex;">
+                        <div class="Div">
+                            <!-- 视频流 -->
+                            <video id="video" autoplay style="width: 200px;height: 200px"></video>
+                        </div>
+                        <div class="Div">
+                            <!--描绘video截图-->
+                            <canvas id="canvas" width="200" height="200"></canvas>
+                        </div>
+                    </div>
+
+                </div>
+            </div>
+
+            <div class="user_management contain div_off">
+                <div class="search">
+                    <span>用户名:</span>
+                    <input type="text">
+                    <button>查询</button>
+                </div>
+
+                <div class="content">
+                    <div class="title">
+                        <ul>
+                            <li>头像</li>
+                            <li>用户名</li>
+                            <li>邮箱</li>
+                            <li>出生年月</li>
+                            <li>兴趣爱好</li>
+                            <li>操作</li>
+                        </ul>
+                    </div>
+                    <div class="dataList">
+                        <ul class="list">
+                            <li>
+                                <ul class="listRow">
+                                    <li class="img">
+                                        <img src="./images/骆佳宜.jpg" alt="">
+                                        <div class="modify_avatar"></div>
+                                    </li>
+                                    <li>骆佳宜</li>
+                                    <li>2556602930@qq.com</li>
+                                    <li>2021/10/1</li>
+                                    <li>听音乐</li>
+                                    <a>查看</a>
+                                </ul>
+                            </li>
+                            <li>
+                                <ul class="listRow">
+                                    <li class="img"> <img src="./images/陆思裕.jpg" alt=""> </li>
+                                    <li>陆思裕</li>
+                                    <li>lusiyu2009@qq.com</li>
+                                    <li>2021/10/2</li>
+                                    <li>看书</li>
+                                    <a>查看</a>
+                                </ul>
+                            </li>
+                            <li>
+                                <ul class="listRow">
+                                    <li class="img"> <img src="./images/李璇.jpg" alt=""> </li>
+                                    <li>李璇</li>
+                                    <li>427739173@qq.com</li>
+                                    <li>2021/10/3</li>
+                                    <li>跑步</li>
+                                    <a>查看</a>
+                                </ul>
+                            </li>
+                            <li>
+                                <ul class="listRow">
+                                    <li class="img"> <img src="./images/滕贺宗.jpg" alt=""> </li>
+                                    <li>滕贺宗</li>
+                                    <li>1611496086@qq.com</li>
+                                    <li>2021/10/4</li>
+                                    <li>羽毛球</li>
+                                    <a>查看</a>
+                                </ul>
+                            </li>
+                            <li>
+                                <ul class="listRow">
+                                    <li class="img"> <img src="./images/黎英杰.jpg" alt=""> </li>
+                                    <li>黎英杰</li>
+                                    <li>1603177372@qq.com</li>
+                                    <li>2021/10/5</li>
+                                    <li>篮球</li>
+                                    <a>查看</a>
+                                </ul>
+                            </li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <!-- <script
+            src="http://api.map.baidu.com/getscript?type=quick&file=api&ak=C93b5178d7a8ebdb830b9b557abce78b&t=20200109092002">
+        </script>
+        <script
+            src="http://api.map.baidu.com/getscript?type=quick&file=feature&ak=C93b5178d7a8ebdb830b9b557abce78b&t=20200109092002">
+        </script> -->
+
+        <!--登录提示查询地理位置,nav_list的高亮 -->
+        <script type="text/javascript">
+            // function getLocation() {
+            //     if (navigator.geolocation) {
+
+            //         navigator.geolocation.getCurrentPosition(showPosition, showError);
+            //     } else {
+            //         alert("浏览器不支持地理定位。");
+            //     }
+            // }
+
+            // // 百度地图API功能
+            // var map = new BMap.Map("allmap");
+            // map.centerAndZoom(new BMap.Point(116.331398, 39.897445), 19);
+            // // map.enableScrollWheelZoom(true);
+            // 用经纬度设置地图中心点
+            // function theLocation() {
+            //     if (document.getElementById("longitude").value != "" && document.getElementById("latitude").value !=
+            //         "") {
+            //         map.clearOverlays();
+            //         var new_point = new BMap.Point(document.getElementById("longitude").value, document
+            //             .getElementById("latitude").value);
+            //         var marker = new BMap.Marker(new_point); // 创建标注
+            //         map.addOverlay(marker); // 将标注添加到地图中
+            //         map.panTo(new_point);
+            //     }
+            // }
+
+            // function showPosition(position) {
+
+            //     $("#latlon").html("纬度:" + position.coords.latitude + '，经度:' + position.coords.longitude);
+            //     var latlon = position.coords.latitude + ',' + position.coords.longitude;
+            //     // window.this_latitude=position.coords.latitude
+            //     // window.this_longitude=position.coords.longitude
+            //     // var map = new BMap.Map("allmap");
+            //     // map.centerAndZoom(new BMap.Point(position.coords.latitude, position.coords.longitude), 19);
+            //     // // // Location(position.coords.latitude, position.coords.longitude)
+            //     // function initialize() {
+            //     //     var mp = new BMapGL.Map('allmap');
+            //     //     mp.centerAndZoom(new BMapGL.Point(121.491, 31.233), 11);
+            //     // }
+
+            //     // function loadScript() {
+            //     //     var script = document.createElement("script");
+            //     //     script.src = "https://api.map.baidu.com/api?v=1.0&type=webgl&ak=C93b5178d7a8ebdb830b9b557abce78b&callback=initialize";
+            //     //     document.body.appendChild(script);
+            //     // }
+            //     // window.onload = loadScript;
+            // }
+            // // 用经纬度设置地图中心点
+            // // function Location(latitude, longitude) {
+            // //     // console.log("sdfjsd")
+            // //     // if (document.getElementById("longitude").value != "" && document.getElementById("latitude").value != "") {
+            // //     // var map = new BMap.Map("allmap");
+            // //     // map.centerAndZoom(new BMap.Point(latitude, longitude), 19);
+            // //     // map.enableScrollWheelZoom(true);
+            // }
+
+            // function showError(error) {
+            //     switch (error.code) {
+            //         case error.PERMISSION_DENIED:
+            //             alert("定位失败,用户拒绝请求地理定位");
+            //             break;
+            //         case error.POSITION_UNAVAILABLE:
+            //             alert("定位失败,位置信息是不可用");
+            //             break;
+            //         case error.TIMEOUT:
+            //             alert("定位失败,请求获取用户位置超时");
+            //             break;
+            //         case error.UNKNOWN_ERROR:
+            //             alert("定位失败,定位系统失效");
+            //             break;
+            //     }
+            // }
+
+            // getLocation();
+        </script>
+        <script type="text/javascript">
+            //nav_list的高亮
+            $('.nav_list').find('li').each(function () {
+                var li = $(this);
+                li.click(function () {
+                    if (li.hasClass('menu_active')) {
+                        li.removeClass('menu_active');
+                    } else {
+                        li.addClass('menu_active');
+                    }
+                })
+            })
+            //API
+            function getLocation() {
+        if (navigator.geolocation) {
+
+            navigator.geolocation.getCurrentPosition(showPosition);
+        } else {
+            alert("浏览器不支持地理定位。");
+        }
+    }
+    var Latitude=0
+    var longitude=0
+    function showPosition(position) {
+        $("#latlon").html("纬度:" + position.coords.latitude + '，经度:' + position.coords.longitude);
+        var latlon = position.coords.latitude + ',' + position.coords.longitude;
+         latitude=position.coords.latitude
+        longitude=position.coords.longitude
+    }
+    getLocation();
+     // 百度地图API功能
+   
+    // 用经纬度设置地图中心点
+    function theLocation() {
+        console.log(latitude)
+        console.log(longitude)
+        var map = new BMap.Map("allmap");
+    map.centerAndZoom(new BMap.Point(116.331398, 39.897445), 19);
+    map.enableScrollWheelZoom(true);
+        map.clearOverlays();
+            var new_point = new BMap.Point(longitude, latitude);
+            var marker = new BMap.Marker(new_point); // 创建标注
+            map.addOverlay(marker); // 将标注添加到地图中
+            map.panTo(new_point);
+    }
+        </script>
+        <script>
+            let img = document.querySelectorAll('.img');
+
+            for (let i = 0; i < img.length; i++) {
+                img[i].onclick = function () {
+                    $(this).toggleClass('active');
+                }
+            }
+            let signIn = document.querySelector('.signIn')
+            signIn.onclick = function () {
+                window.location.href = "登录页面.html";
+            }
+
+            // 左侧菜单功能切换
+            let menu_bar = document.querySelectorAll('.body-left ul li');
+            let body_right = document.querySelector('.body-right');
+
+            for (let i = 0; i < menu_bar.length; i++) {
+                menu_bar[i].onclick = function () {
+                    $('.body-right').find('.contain').each(function () {
+                        var div = $(this);
+                        div.addClass('div_off');
+                    })
+                    if (i == 0) {
+                        $('.modify_avatar').removeClass('div_off')
+                        //             body_right.innerHTML = ` 
+                        // <div class="modify_avatar">
+                        //     <div class="user_avatar">
+                        //         <img src="./images/滕贺宗.jpg" alt="">
+                        //     </div>
+                        //     <div class="modify_img" dropzone='link'>
+                        //         拖入图片修改
+                        //     </div>
+
+                        // </div>
+
+                        // </div>
+                        // `
+                        ;
+                    } else if (i == 1) {
+                        $('.user_management').removeClass('div_off')
+
+                        //             body_right.innerHTML = ` <div class="personal_information">
+                        //   个人信息
+                        // </div>
+
+                        // <div class="user_management">
+                        //     <div class="search">
+                        //         <span>用户名:</span>
+                        //         <input type="text">
+                        //         <button>查询</button>
+                        //     </div>
+
+                        //     <div class="content">
+                        //         <div class="title">
+                        //             <ul>
+                        //                 <li>头像</li>
+                        //                 <li>用户名</li>
+                        //                 <li>邮箱</li>
+                        //                 <li>出生年月</li>
+                        //                 <li>兴趣爱好</li>
+                        //                 <li>操作</li>
+                        //             </ul>
+                        //         </div>
+                        //         <div class="dataList">
+                        //             <ul class="list">
+                        //                 <li>
+                        //                     <ul class="listRow">
+                        //                         <li class="img"> <img src="./images/骆佳宜.jpg" alt=""> </li>
+                        //                         <li>骆佳宜</li>
+                        //                         <li>2556602930@qq.com</li>
+                        //                         <li>2021/10/1</li>
+                        //                         <li>听音乐</li>
+                        //                         <a>查看</a>
+                        //                     </ul>
+                        //                 </li>
+                        //                 <li>
+                        //                     <ul class="listRow">
+                        //                         <li class="img"> <img src="./images/陆思裕.jpg" alt=""> </li>
+                        //                         <li>陆思裕</li>
+                        //                         <li>lusiyu2009@qq.com</li>
+                        //                         <li>2021/10/2</li>
+                        //                         <li>看书</li>
+                        //                         <a>查看</a>
+                        //                     </ul>
+                        //                 </li>
+                        //                 <li>
+                        //                     <ul class="listRow">
+                        //                         <li class="img"> <img src="./images/李璇.jpg" alt=""> </li>
+                        //                         <li>李璇</li>
+                        //                         <li>427739173@qq.com</li>
+                        //                         <li>2021/10/3</li>
+                        //                         <li>跑步</li>
+                        //                         <a>查看</a>
+                        //                     </ul>
+                        //                 </li>
+                        //                 <li>
+                        //                     <ul class="listRow">
+                        //                         <li class="img"> <img src="./images/滕贺宗.jpg" alt=""> </li>
+                        //                         <li>滕贺宗</li>
+                        //                         <li>1611496086@qq.com</li>
+                        //                         <li>2021/10/4</li>
+                        //                         <li>羽毛球</li>
+                        //                         <a>查看</a>
+                        //                     </ul>
+                        //                 </li>
+                        //                 <li>
+                        //                     <ul class="listRow">
+                        //                         <li class="img"> <img src="./images/黎英杰.jpg" alt=""> </li>
+                        //                         <li>黎英杰</li>
+                        //                         <li>1603177372@qq.com</li>
+                        //                         <li>2021/10/5</li>
+                        //                         <li>篮球</li>
+                        //                         <a>查看</a>
+                        //                     </ul>
+                        //                 </li>
+                        //             </ul>
+                        //         </div>
+                        //     </div>
+                        // </div>
+                        // </div>`
+                    } else if (i == 2) {
+                        body_right.innerHTML = '待开发';
+                    }
+                    $(this).addClass("menu_active").siblings().removeClass("menu_active");
+                }
+            }
+            // let modify_img = document.querySelector('.modify_img');
+
+            // function allowDrop(ev) {
+            //     ev.preventDefault();
+            // }
+
+            // function drop(ev) {
+            //     ev.preventDefault();
+            //     var files = ev.dataTransfer.files;
+            //     console.log(files);
+            // }
+            // modify_img.ondrop = function (e) {
+            //     let f = e.dataTransfer.files[0]; //获取到第一个上传的文件对象
+            //     let fr = new FileReader(); //实例FileReader对象
+            //     fr.readAsDataURL(f); //把上传的文件对象转换成url
+            //     console.log(fr.readAsDataURL(f));
+            // }
+        </script>
+        <!--相机API调用 -->
+        <script type="text/javascript">
+            //访问用户媒体设备的兼容方法
+            function getUserMedia(constrains, success, error) {
+                if (navigator.mediaDevices.getUserMedia) {
+                    //最新标准API
+                    navigator.mediaDevices.getUserMedia(constrains).then(success).catch(error);
+                } else if (navigator.webkitGetUserMedia) {
+                    //webkit内核浏览器
+                    navigator.webkitGetUserMedia(constrains).then(success).catch(error);
+                } else if (navigator.mozGetUserMedia) {
+                    //Firefox浏览器
+                    navagator.mozGetUserMedia(constrains).then(success).catch(error);
+                } else if (navigator.getUserMedia) {
+                    //旧版API
+                    navigator.getUserMedia(constrains).then(success).catch(error);
+                } else {
+                    alert("不支持的浏览器");
+                }
+            }
+            //成功的回调函数
+            function success(stream) {
+                //兼容webkit内核浏览器
+                var CompatibleURL = window.URL || window.webkitURL;
+                //将视频流设置为video元素的源
+                try {
+                    video.srcObject = stream;
+                } catch (e) {
+                    video.src = CompatibleURL.createObjectURL(stream);
+                }
+                //播放视频
+                video.play();
+            }
+            //异常的回调函数
+            function error(error) {
+                alert("访问用户媒体设备失败," + error.name + "" + error.message);
+            }
+
+            /**
+             * 获取当前静态页面的参数
+             * 返回值和使用方法类似java request的getparamater
+             * 不同: 当取得的为数组(length>1)时调用toString()返回(逗号分隔每个元素)
+             * @param {Object} name
+             * @return {TypeName} 
+             */
+            function getPara(name, search) {
+                var p = getParas(name, search);
+                if (p.length == 0) {
+                    return null;
+                } else if (p.length == 1) {
+                    return p[0];
+                } else {
+                    return p.toString();
+                }
+            }
+
+            /**获取当前静态页面的参数
+             * 返回值和使用方法类似java request的getparamaterValues
+             * @param {Object} name 要取出的参数名,可以在参数字符串中重复出现
+             * @param {Object} search 手工指定要解析的参数字符串,默认为当前页面后跟的参数
+             * @return {TypeName} 
+             */
+            function getParas(name, search) {
+                if (!search) {
+                    search = window.location.search.substr(1); //1.html?a=1&b=2
+                }
+                var para = [];
+                var pairs = search.split("&"); //a=1&b=2&b=2&c=2&b=2
+                for (var i = 0; i < pairs.length; i = i + 1) {
+                    var sign = pairs[i].indexOf("=");
+                    if (sign == -1) { //如果没有找到=号，那么就跳过，跳到下一个字符串（下一个循环）。	
+                        continue;
+                    }
+                    var aKey = pairs[i].substring(0, sign);
+                    if (aKey == name) {
+                        para.push(unescape(pairs[i].substring(sign + 1)));
+                    }
+                }
+                return para;
+            }
+            //开启摄像头
+            function captureInit() {
+                if ((navigator.mediaDevices != undefined && navigator.mediaDevices.getUserMedia != undefined) ||
+                    navigator.getUserMedia != undefined ||
+                    navigator.webkitGetUserMedia != undefined ||
+                    navigator.mozGetUserMedia != undefined) {
+                    document.getElementById("help").style.display = "none";
+                    //调用用户媒体设备，访问摄像头,改为触发事件
+                    getUserMedia({
+                        video: {
+                            width: imgWidth,
+                            height: imgHeight
+                        }
+                    }, success, error);
+                    if (captureState == 0) {
+                        captureState = 1; //标记此按钮已点击
+                    }
+                } else {
+                    captureState = 0; //异常标识按钮没点
+                    alert("你的浏览器不支持访问用户媒体设备或访问地址不是https开头,您可以点击右侧下载解决方案");
+                    document.getElementById("help").style.display = "inline-block";
+                }
+            }
+            //注册拍照按钮的单击事件
+            function capture() {
+                //绘制画面
+                if (captureState == 0) {
+                    alert("请先开启摄像头");
+                    return;
+                }
+                context.drawImage(video, 0, 0, imgWidth, imgHeight); //后面两个长宽
+                //canvas.toDataURL("image/png");//即可得到base64编码
+                captureState = 2;
+            }
+            //确认按钮返回给父页面的函数
+            function queren() {
+                if (captureState != 2) {
+                    alert("请先开启摄像头并拍照");
+                    return;
+                }
+                var base64 = canvas.toDataURL("image/jpeg");
+                var pics = {};
+                pics.filetypeid = filetypeid; //返回给前端
+                pics.base64 = base64;
+                if (window.opener) {
+                    window.opener[cb](pics); // /FileUploadTmp/为项目临时文件夹相对路径
+                    window.close();
+                } else if (window.parent) {
+                    window.parent[cb](pics);
+                    window.parent.$("#dialog_ifr_html").dialog("close"); //close会导致flash未执行完就销毁,页面JS报错
+                } else {
+                    window.close();
+                }
+            }
+        </script>
+        <!--照片呈现 -->
+        <script type="text/javascript">
+            var cb = getPara("cb") || "setImg";
+            var filetypeid = getPara("filetypeid") || "filetypeid"; //附件类型id
+            var video = document.getElementById("video");
+            var canvas = document.getElementById("canvas");
+            var context = canvas.getContext("2d");
+            var imgWidth = getPara("width") || "300"; //这个值div的宽一致
+            var imgHeight = getPara("height") || "200"; //这个值div的高一致
+            var captureState = 0; //未开启,1已开启,2已拍照,为2才可点击确认按钮
+            var style = getPara("style") || "big-btn-blue";
+            video.style.width = imgWidth;
+            video.style.height = imgHeight;
+            var st = style.split(",");
+            document.getElementById("init").className = st[0];
+            document.getElementById("capture").className = st[1] || st[0];
+            document.getElementById("queren").className = st[2] || st[0];
+            document.getElementById("help").className = st[3] || st[0];
+        </script>
+
+</body>
+
+</html>
