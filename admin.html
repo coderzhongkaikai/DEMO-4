@@ -3,7 +3,7 @@
 
 <head>
     <html lang="zh-cmn-Hans">
-        <meta charset="UTF-8">
+    <meta charset="UTF-8">
     <meta name="viewport"
         content="width=device-width,initial-scale=1.0, minimum-scale=1.0, maximum-scale=1.0, user-scalable=no" />
     <title>Document</title>
@@ -113,7 +113,10 @@
             /* position: fixed; */
             background-color: #393D49;
         }
-
+        #map_box{
+            width: 80%;
+            height: 300px;
+        }
         .body .body-left ul {
             width: 100%;
         }
@@ -326,9 +329,13 @@
         .Div {
             margin: 20px;
         }
+        ._map{
+            /* display: none; */
+        }
     </style>
     <script src="https://apps.bdimg.com/libs/jquery/2.1.4/jquery.min.js"></script>
-    <script type="text/javascript" src="http://api.map.baidu.com/api?v=1.0&ak=C93b5178d7a8ebdb830b9b557abce78b"></script>
+    <script type="text/javascript" src="http://api.map.baidu.com/api?v=1.0&ak=C93b5178d7a8ebdb830b9b557abce78b">
+    </script>
 
 </head>
 
@@ -360,8 +367,8 @@
                     <p>欢迎登录</p>
                 </div>
                 <div class="nav_list">
-                    <li class="menu_active">个人信息</li>
-                    <li >用户管理</li>
+                    <li  class="menu_active">个人信息</li>
+                    <li>用户管理</li>
                     <li>系统设置</li>
                 </div>
             </ul>
@@ -369,7 +376,6 @@
 
 
         <div class="body-right">
-
             <div class="modify_avatar contain ">
                 <div class="user_avatar">
                     <img src="./images/滕贺宗.jpg" alt="">
@@ -378,20 +384,17 @@
                     拖入图片修改
                 </div>
 
-                <div id="map ">
-                    <div class="top"></div>
-                    <div class="demo">
+                <div id="map_box">
+                    <!-- <div class="top"> -->
+                    <!-- </div> -->
                         <p>地理坐标：<span id="latlon"></span></p>
                         <div class="geo">
-                            <p>百度地图定位位置：</p>
-                            <input type="button" value="查询" onclick="theLocation()" />
-                            <div id="allmap" style="width: 80%;height: 80%;"></div>
-                            <p id="baidu_geo"></p>
+                            <p>百度地图定位位置：
+                            <!-- <input type="button" value="查询" onclick="theLocation()" /> -->
+                            </p>
                         </div>
-                    </div>
-
+                        <div id="allmap" class="_map"  style="width: 80%;height: 80%;"></div>
                 </div>
-
                 <div>
                     <div class="Div" id="cameraBtn">
                         <input type="button" id="init" onclick="captureInit()" value="开启摄像头" />
@@ -413,7 +416,6 @@
 
                 </div>
             </div>
-
             <div class="user_management contain div_off">
                 <div class="search">
                     <span>用户名:</span>
@@ -491,6 +493,7 @@
                     </div>
                 </div>
             </div>
+            <div class="contain watting div_off">待开发</div>
         </div>
         <!-- <script
             src="http://api.map.baidu.com/getscript?type=quick&file=api&ak=C93b5178d7a8ebdb830b9b557abce78b&t=20200109092002">
@@ -500,82 +503,6 @@
         </script> -->
 
         <!--登录提示查询地理位置,nav_list的高亮 -->
-        <script type="text/javascript">
-            // function getLocation() {
-            //     if (navigator.geolocation) {
-
-            //         navigator.geolocation.getCurrentPosition(showPosition, showError);
-            //     } else {
-            //         alert("浏览器不支持地理定位。");
-            //     }
-            // }
-
-            // // 百度地图API功能
-            // var map = new BMap.Map("allmap");
-            // map.centerAndZoom(new BMap.Point(116.331398, 39.897445), 19);
-            // // map.enableScrollWheelZoom(true);
-            // 用经纬度设置地图中心点
-            // function theLocation() {
-            //     if (document.getElementById("longitude").value != "" && document.getElementById("latitude").value !=
-            //         "") {
-            //         map.clearOverlays();
-            //         var new_point = new BMap.Point(document.getElementById("longitude").value, document
-            //             .getElementById("latitude").value);
-            //         var marker = new BMap.Marker(new_point); // 创建标注
-            //         map.addOverlay(marker); // 将标注添加到地图中
-            //         map.panTo(new_point);
-            //     }
-            // }
-
-            // function showPosition(position) {
-
-            //     $("#latlon").html("纬度:" + position.coords.latitude + '，经度:' + position.coords.longitude);
-            //     var latlon = position.coords.latitude + ',' + position.coords.longitude;
-            //     // window.this_latitude=position.coords.latitude
-            //     // window.this_longitude=position.coords.longitude
-            //     // var map = new BMap.Map("allmap");
-            //     // map.centerAndZoom(new BMap.Point(position.coords.latitude, position.coords.longitude), 19);
-            //     // // // Location(position.coords.latitude, position.coords.longitude)
-            //     // function initialize() {
-            //     //     var mp = new BMapGL.Map('allmap');
-            //     //     mp.centerAndZoom(new BMapGL.Point(121.491, 31.233), 11);
-            //     // }
-
-            //     // function loadScript() {
-            //     //     var script = document.createElement("script");
-            //     //     script.src = "https://api.map.baidu.com/api?v=1.0&type=webgl&ak=C93b5178d7a8ebdb830b9b557abce78b&callback=initialize";
-            //     //     document.body.appendChild(script);
-            //     // }
-            //     // window.onload = loadScript;
-            // }
-            // // 用经纬度设置地图中心点
-            // // function Location(latitude, longitude) {
-            // //     // console.log("sdfjsd")
-            // //     // if (document.getElementById("longitude").value != "" && document.getElementById("latitude").value != "") {
-            // //     // var map = new BMap.Map("allmap");
-            // //     // map.centerAndZoom(new BMap.Point(latitude, longitude), 19);
-            // //     // map.enableScrollWheelZoom(true);
-            // }
-
-            // function showError(error) {
-            //     switch (error.code) {
-            //         case error.PERMISSION_DENIED:
-            //             alert("定位失败,用户拒绝请求地理定位");
-            //             break;
-            //         case error.POSITION_UNAVAILABLE:
-            //             alert("定位失败,位置信息是不可用");
-            //             break;
-            //         case error.TIMEOUT:
-            //             alert("定位失败,请求获取用户位置超时");
-            //             break;
-            //         case error.UNKNOWN_ERROR:
-            //             alert("定位失败,定位系统失效");
-            //             break;
-            //     }
-            // }
-
-            // getLocation();
-        </script>
         <script type="text/javascript">
             //nav_list的高亮
             $('.nav_list').find('li').each(function () {
@@ -590,37 +517,52 @@
             })
             //API
             function getLocation() {
-        if (navigator.geolocation) {
+                if (navigator.geolocation) {
 
-            navigator.geolocation.getCurrentPosition(showPosition);
-        } else {
-            alert("浏览器不支持地理定位。");
-        }
-    }
-    var Latitude=0
-    var longitude=0
-    function showPosition(position) {
-        $("#latlon").html("纬度:" + position.coords.latitude + '，经度:' + position.coords.longitude);
-        var latlon = position.coords.latitude + ',' + position.coords.longitude;
-         latitude=position.coords.latitude
-        longitude=position.coords.longitude
-    }
-    getLocation();
-     // 百度地图API功能
-   
-    // 用经纬度设置地图中心点
-    function theLocation() {
-        console.log(latitude)
-        console.log(longitude)
-        var map = new BMap.Map("allmap");
-    map.centerAndZoom(new BMap.Point(116.331398, 39.897445), 19);
-    map.enableScrollWheelZoom(true);
-        map.clearOverlays();
-            var new_point = new BMap.Point(longitude, latitude);
-            var marker = new BMap.Marker(new_point); // 创建标注
-            map.addOverlay(marker); // 将标注添加到地图中
-            map.panTo(new_point);
-    }
+                    navigator.geolocation.getCurrentPosition(showPosition);
+                } else {
+                    alert("浏览器不支持地理定位。");
+                }
+            }
+            var Latitude = 0
+            var longitude = 0
+
+            function showPosition(position) {
+                $("#latlon").html("纬度:" + position.coords.latitude + '，经度:' + position.coords.longitude);
+                var latlon = position.coords.latitude + ',' + position.coords.longitude;
+                latitude = position.coords.latitude
+                longitude = position.coords.longitude
+                this.theLocation()
+            }
+            getLocation();
+            // 百度地图API功能
+            // 用经纬度设置地图中心点
+            function theLocation() {
+                console.log(latitude)
+                // $('#allmap').removeClass('_map')
+                $('._map').css("display",'block')
+                // .css("background-color","yellow");
+                console.log(longitude)
+                map.clearOverlays();
+                var new_point = new BMap.Point(longitude, latitude);
+                var marker = new BMapGL.Marker(new_point); // 创建标注
+                map.addOverlay(marker); // 将标注添加到地图中
+                map.panTo(new_point);
+            }
+
+            function initialize() { 
+            window.map = new BMapGL.Map('allmap');
+            map.centerAndZoom(new BMapGL.Point(0, 0), 19);
+            map.enableScrollWheelZoom(true);
+            }
+
+            function loadScript() {
+                var script = document.createElement("script");
+                script.src =
+                    "https://api.map.baidu.com/api?v=1.0&type=webgl&ak=C93b5178d7a8ebdb830b9b557abce78b&callback=initialize";
+                document.body.appendChild(script);
+            }
+            window.onload = loadScript;
         </script>
         <script>
             let img = document.querySelectorAll('.img');
@@ -632,7 +574,7 @@
             }
             let signIn = document.querySelector('.signIn')
             signIn.onclick = function () {
-                window.location.href = "登录页面.html";
+                window.location.href = "login.html";
             }
 
             // 左侧菜单功能切换
@@ -647,104 +589,12 @@
                     })
                     if (i == 0) {
                         $('.modify_avatar').removeClass('div_off')
-                        //             body_right.innerHTML = ` 
-                        // <div class="modify_avatar">
-                        //     <div class="user_avatar">
-                        //         <img src="./images/滕贺宗.jpg" alt="">
-                        //     </div>
-                        //     <div class="modify_img" dropzone='link'>
-                        //         拖入图片修改
-                        //     </div>
-
-                        // </div>
-
-                        // </div>
-                        // `
                         ;
                     } else if (i == 1) {
                         $('.user_management').removeClass('div_off')
-
-                        //             body_right.innerHTML = ` <div class="personal_information">
-                        //   个人信息
-                        // </div>
-
-                        // <div class="user_management">
-                        //     <div class="search">
-                        //         <span>用户名:</span>
-                        //         <input type="text">
-                        //         <button>查询</button>
-                        //     </div>
-
-                        //     <div class="content">
-                        //         <div class="title">
-                        //             <ul>
-                        //                 <li>头像</li>
-                        //                 <li>用户名</li>
-                        //                 <li>邮箱</li>
-                        //                 <li>出生年月</li>
-                        //                 <li>兴趣爱好</li>
-                        //                 <li>操作</li>
-                        //             </ul>
-                        //         </div>
-                        //         <div class="dataList">
-                        //             <ul class="list">
-                        //                 <li>
-                        //                     <ul class="listRow">
-                        //                         <li class="img"> <img src="./images/骆佳宜.jpg" alt=""> </li>
-                        //                         <li>骆佳宜</li>
-                        //                         <li>2556602930@qq.com</li>
-                        //                         <li>2021/10/1</li>
-                        //                         <li>听音乐</li>
-                        //                         <a>查看</a>
-                        //                     </ul>
-                        //                 </li>
-                        //                 <li>
-                        //                     <ul class="listRow">
-                        //                         <li class="img"> <img src="./images/陆思裕.jpg" alt=""> </li>
-                        //                         <li>陆思裕</li>
-                        //                         <li>lusiyu2009@qq.com</li>
-                        //                         <li>2021/10/2</li>
-                        //                         <li>看书</li>
-                        //                         <a>查看</a>
-                        //                     </ul>
-                        //                 </li>
-                        //                 <li>
-                        //                     <ul class="listRow">
-                        //                         <li class="img"> <img src="./images/李璇.jpg" alt=""> </li>
-                        //                         <li>李璇</li>
-                        //                         <li>427739173@qq.com</li>
-                        //                         <li>2021/10/3</li>
-                        //                         <li>跑步</li>
-                        //                         <a>查看</a>
-                        //                     </ul>
-                        //                 </li>
-                        //                 <li>
-                        //                     <ul class="listRow">
-                        //                         <li class="img"> <img src="./images/滕贺宗.jpg" alt=""> </li>
-                        //                         <li>滕贺宗</li>
-                        //                         <li>1611496086@qq.com</li>
-                        //                         <li>2021/10/4</li>
-                        //                         <li>羽毛球</li>
-                        //                         <a>查看</a>
-                        //                     </ul>
-                        //                 </li>
-                        //                 <li>
-                        //                     <ul class="listRow">
-                        //                         <li class="img"> <img src="./images/黎英杰.jpg" alt=""> </li>
-                        //                         <li>黎英杰</li>
-                        //                         <li>1603177372@qq.com</li>
-                        //                         <li>2021/10/5</li>
-                        //                         <li>篮球</li>
-                        //                         <a>查看</a>
-                        //                     </ul>
-                        //                 </li>
-                        //             </ul>
-                        //         </div>
-                        //     </div>
-                        // </div>
-                        // </div>`
+                
                     } else if (i == 2) {
-                        body_right.innerHTML = '待开发';
+                        $('.watting').removeClass('div_off')
                     }
                     $(this).addClass("menu_active").siblings().removeClass("menu_active");
                 }
@@ -920,6 +770,9 @@
             document.getElementById("capture").className = st[1] || st[0];
             document.getElementById("queren").className = st[2] || st[0];
             document.getElementById("help").className = st[3] || st[0];
+        </script>
+        <script>
+
         </script>
 
 </body>
